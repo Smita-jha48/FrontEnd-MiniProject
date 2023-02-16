@@ -125,6 +125,7 @@ export default function StoryInput() {
                     <input type='text' name='story' value={stories} onChange={(e) => setStories(e.target.value)} />
                 </div>
                 <div>
+
                     <label htmlFor='dependencies'>Dependencies</label>
                     <input type='text' name='dependencies' value={dependencies} onChange={(e) => setDependencies(e.target.value)} />
                 </div>
