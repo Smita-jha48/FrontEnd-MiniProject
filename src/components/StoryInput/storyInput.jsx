@@ -8,6 +8,7 @@ import {
     Menu,
     MenuItem,
     Box,
+    Input,
     createTheme,
     responsiveFontSizes
 } from '@mui/material'
@@ -30,6 +31,7 @@ function Item(props) {
             sx={{
                 p: 1,
                 m: 1,
+                width:200,
                 bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
                 color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
                 border: '1px solid',
@@ -69,7 +71,7 @@ export default function StoryInput() {
         e.preventDefault();
         if (stories && storyPoints) {
             const newStory = { stories, dependencies, developer, storyPoints };
-            const myArray = newStory.dependencies.split(",");
+            const myArray = newStory.dependencies.split(',');
             const myNewArray = myArray.map((item) => {
                 return parseInt(item);
             })
@@ -101,6 +103,7 @@ export default function StoryInput() {
                 {storyList.map((story) => {
                     const { id, stories, dependencies, developer, storyPoints } = story;
                     return (
+                        <>
                         <Box key={id} sx={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -114,31 +117,42 @@ export default function StoryInput() {
                             <Item width={200}>{dependencies.toString()}</Item>
                             <Item width={200}>{developer}</Item>
                             <Item width={200}>{storyPoints}</Item>
-                            <button onClick={() => removeItem(id)}>-</button>
-                        </Box>
+                            <Button  onClick={() => removeItem(id)}>Remove</Button>
+                         </Box>
+                        </>
                     );
                 })}
             </div>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor='story'>Stories </label>
-                    <input type='text' name='story' value={stories} onChange={(e) => setStories(e.target.value)} />
-                </div>
-                <div>
+            <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            p: 2,
+                            m: 4,
+                            justifyContent: 'space-evenly',
+                            bgcolor: 'background.white',
+                            borderRadius: 1,
+                        }} >
+                <Item>
+                    
+                    <Input type='text' name='story' defaultValue="Disabled" value={stories} onChange={(e) => setStories(e.target.value)} />
+                </Item>
+                <Item>
 
-                    <label htmlFor='dependencies'>Dependencies</label>
-                    <input type='text' name='dependencies' value={dependencies} onChange={(e) => setDependencies(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor='developers'>Developers </label>
-                    <input type='text' name='developers' value={developer} onChange={(e) => setDeveloper(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor='storyPoints'>Stories </label>
-                    <input type='text' name='storyPoints' value={storyPoints} onChange={(e) => setStoryPoints(e.target.value)} />
-                </div>
+                    
+                    <Input type='text' name='dependencies' value={dependencies} onChange={(e) => setDependencies(e.target.value)} />
+                </Item>
+                <Item>
+                    
+                    <Input type='text' name='developers' value={developer} onChange={(e) => setDeveloper(e.target.value)} />
+                </Item>
+                <Item>
+                    
+                    <Input type='text' name='storyPoints' value={storyPoints} onChange={(e) => setStoryPoints(e.target.value)} />
+                </Item>
+                </Box>
+                <Button variant="contained" style={{margin: '0 auto' , display: 'flex'}} type='submit'>Add Story</Button>
 
-                <button type='submit'>Add Person</button>
             </form>
         </>
 
