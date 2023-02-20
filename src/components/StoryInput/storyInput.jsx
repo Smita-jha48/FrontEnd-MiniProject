@@ -9,6 +9,8 @@ import {
     MenuItem,
     Box,
     Input,
+    Fab,
+    bgcolor,
     createTheme,
     responsiveFontSizes
 } from '@mui/material'
@@ -31,7 +33,7 @@ function Item(props) {
             sx={{
                 p: 1,
                 m: 1,
-                width:200,
+                width: 200,
                 bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
                 color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
                 border: '1px solid',
@@ -85,75 +87,55 @@ export default function StoryInput() {
     }
     return (
         <>
+        <Box mx='auto'sx={{ bgcolor: 'text.disabled', borderRadius: 2, mt: 2 }} >
             <div>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    p: 2,
-                    m: 4,
-                    justifyContent: 'space-around',
-                    bgcolor: 'background.white',
-                    borderRadius: 1,
-                }} >
-                    <Item width={200}>Stories</Item>
-                    <Item width={200}>Dependencies</Item>
-                    <Item width={200}>Developer</Item>
-                    <Item width={200}>Story Points</Item>
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 2fr) 1fr', ml: 6, p: 4}}>
+                    <Item >Stories</Item>
+                    <Item >Dependencies</Item>
+                    <Item >Developer</Item>
+                    <Item >Story Points</Item>
+
                 </Box>
                 {storyList.map((story) => {
                     const { id, stories, dependencies, developer, storyPoints } = story;
                     return (
                         <>
-                        <Box key={id} sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            p: 2,
-                            m: 4,
-                            justifyContent: 'space-evenly',
-                            bgcolor: 'background.white',
-                            borderRadius: 1,
-                        }} >
-                            <Item width={200}>{stories}</Item>
-                            <Item width={200}>{dependencies.toString()}</Item>
-                            <Item width={200}>{developer}</Item>
-                            <Item width={200}>{storyPoints}</Item>
-                            <Button  onClick={() => removeItem(id)}>Remove</Button>
-                         </Box>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 2fr) 1fr', ml: 6, p: 4 }}>
+                                <Item >{stories}</Item>
+                                <Item >{dependencies.toString()}</Item>
+                                <Item >{developer}</Item>
+                                <Item  >{storyPoints}</Item>
+                                <Fab color="primary" onClick={() => removeItem(id)} aria-label="add">-</Fab>
+                                {/* // <Button  onClick={() => removeItem(id)}>Remove</Button> */}
+                            </Box>
                         </>
                     );
                 })}
             </div>
             <form onSubmit={handleSubmit}>
-            <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            p: 2,
-                            m: 4,
-                            justifyContent: 'space-evenly',
-                            bgcolor: 'background.white',
-                            borderRadius: 1,
-                        }} >
-                <Item>
-                    
-                    <Input type='text' name='story' defaultValue="Disabled" value={stories} onChange={(e) => setStories(e.target.value)} />
-                </Item>
-                <Item>
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 2fr) 1fr', ml: 6, p: 4 }}>
+                    <Item>
 
-                    
-                    <Input type='text' name='dependencies' value={dependencies} onChange={(e) => setDependencies(e.target.value)} />
-                </Item>
-                <Item>
-                    
-                    <Input type='text' name='developers' value={developer} onChange={(e) => setDeveloper(e.target.value)} />
-                </Item>
-                <Item>
-                    
-                    <Input type='text' name='storyPoints' value={storyPoints} onChange={(e) => setStoryPoints(e.target.value)} />
-                </Item>
+                        <Input type='text' name='story' defaultValue="Disabled" value={stories} placeholder="Enter Story Title" onChange={(e) => setStories(e.target.value)} />
+                    </Item>
+                    <Item>
+
+
+                        <Input type='text' name='dependencies' value={dependencies} placeholder="Enter Dependencies" onChange={(e) => setDependencies(e.target.value)} />
+                    </Item>
+                    <Item>
+
+                        <Input type='text' name='developers' value={developer} placeholder="Enter Developer" onChange={(e) => setDeveloper(e.target.value)} />
+                    </Item>
+                    <Item>
+
+                        <Input type='text' name='storyPoints' value={storyPoints} placeholder="Enter Story Points" onChange={(e) => setStoryPoints(e.target.value)} />
+                    </Item>
                 </Box>
-                <Button variant="contained" style={{margin: '0 auto' , display: 'flex'}} type='submit'>Add Story</Button>
+                <Button variant="contained" style={{ margin: '0 auto', display: 'flex' }} type='submit'>Add Story</Button>
 
             </form>
+            </Box>
         </>
 
     )
