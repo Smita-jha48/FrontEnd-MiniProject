@@ -14,7 +14,8 @@ import {
   //   Grid,
 } from '@mui/material'
 import PropTypes from 'prop-types'
-// import React, { useState } from 'react'
+import React from 'react'
+import './developerEntry.css'
 
 function Item(props) {
   const { sx, ...other } = props
@@ -23,7 +24,7 @@ function Item(props) {
       sx={{
         p: 1,
         m: 1,
-        width: 200,
+        width: 150,
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
         color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
         border: '1px solid',
@@ -32,6 +33,7 @@ function Item(props) {
         fontSize: '0.875rem',
         fontWeight: '700',
         ...sx,
+        textAlign: 'center',
       }}
       {...other}
     />
@@ -46,39 +48,36 @@ Item.propTypes = {
   ]),
 }
 
-export default function DeveloperEntry({ developerList, removeItem }) {
+export default function DeveloperEntry({ key, index, developerInfo, removeItem }) {
+  const { developer, sprintCapacity, capacity } = developerInfo
   return (
-    <>
-      {developerList.map((developerInfo, index) => {
-        const { developer, sprintCapacity, capacity } = developerInfo
-        return (
-          <>
-            <Box
-              key={index}
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr) 5fr',
-                p: 2,
-                m: 4,
-                justifyContent: 'space-evenly',
-                bgcolor: 'background.white',
-                borderRadius: 1,
-              }}
-            >
-              <Item width={200}>{index + 1}</Item>
-              <Item width={200}>{developer.toString()}</Item>
-              <Item width={200}>{sprintCapacity}</Item>
-              <Item width={200}>{capacity}</Item>
-              <Button onClick={() => removeItem(index)}>Remove</Button>
-            </Box>
-          </>
-        )
-      })}
-    </>
+    <div className='list-item' key={key}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 2fr) 1fr',
+          p: 1,
+          m: 2,
+          justifyContent: 'space-between',
+          bgcolor: 'background.white',
+          borderRadius: 1,
+          gap: '0 2rem',
+          width: '70vw',
+        }}
+      >
+        <Item width={200}>{index + 1}</Item>
+        <Item width={200}>{developer.toString()}</Item>
+        <Item width={200}>{sprintCapacity}</Item>
+        <Item width={200}>{capacity}</Item>
+        <Button onClick={() => removeItem(index)}>==</Button>
+      </Box>
+    </div>
   )
 }
 
 DeveloperEntry.propTypes = {
-  developerList: PropTypes.array,
+  key: PropTypes.number,
+  index: PropTypes.number,
+  developerInfo: PropTypes.object,
   removeItem: PropTypes.func,
 }

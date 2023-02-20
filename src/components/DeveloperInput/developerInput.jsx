@@ -16,12 +16,13 @@ import {
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import DeveloperEntry from '../DeveloperEntry/developerEntry'
+import './developerInput.css'
 
 const data = [
-  { id: 0, developer: 'xyz', sprintCapacity: 8, capacity: 14 },
-  { id: 1, developer: 'uvw', sprintCapacity: 8, capacity: 42 },
-  { id: 2, developer: 'pqr', sprintCapacity: 8, capacity: 34 },
-  { id: 3, developer: 'yut', sprintCapacity: 8, capacity: 54 },
+  { developer: 'xyz', sprintCapacity: 8, capacity: 14 },
+  { developer: 'uvw', sprintCapacity: 8, capacity: 42 },
+  { developer: 'pqr', sprintCapacity: 8, capacity: 34 },
+  { developer: 'yut', sprintCapacity: 8, capacity: 54 },
 ]
 
 function Item(props) {
@@ -62,32 +63,35 @@ export default function DeveloperInput() {
   const [capacity, setCapacity] = useState(0)
 
   const removeItem = (id) => {
-    let newDeveloperList = developerList.filter((developer) => developer.id !== id)
+    let newDeveloperList = developerList.filter((developer, index) => index !== id)
     setDeveloperList(newDeveloperList)
   }
   const handleSubmit = (e) => {
     e.preventDefault()
     if (developer && capacity && sprintCapacity) {
-      //   const newId = developerList.length
-      const newDeveloper = { developer, sprintCapacity, capacity }
+      const newId = developerList.length
+      const newDeveloper = { id: newId, developer, sprintCapacity, capacity }
       setDeveloperList((developerList) => {
         return [...developerList, newDeveloper]
       })
       //   setId(developerList.length)
       setDeveloper('')
-      console.log(developerList)
+      //   console.log(developerList)
     }
   }
+  // on drag change the position of the developer
+
   return (
-    <>
+    <div className='dev-container'>
       <div>
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr) 5fr',
-            p: 2,
-            m: 4,
+            gridTemplateColumns: 'repeat(4, 2fr) 1fr',
+            p: '0 1',
+            m: '0 3',
             justifyContent: 'space-around',
+            textAlign: 'center',
             bgcolor: 'background.white',
             borderRadius: 1,
           }}
@@ -97,51 +101,32 @@ export default function DeveloperInput() {
           <Item width={150}>Sprint Capacity</Item>
           <Item width={150}>Capacity</Item>
         </Box>
-        {/* {developerList.map((developerInfo) => {
-                    const { id, developer, sprintCapacity, capacity } = developerInfo;
-                    return (
-                        <>
-                        <Box key={id} sx={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(5, 1fr)',
-                            p: 2,
-                            m: 4,
-                            justifyContent: 'space-evenly',
-                            bgcolor: 'background.white',
-                            borderRadius: 1,
-                        }} >
-                            <Item width={200}>{id}</Item>
-                            <Item width={200}>{developer.toString()}</Item>
-                            <Item width={200}>{sprintCapacity}</Item>
-                            <Item width={200}>{capacity}</Item>
-                            <Button  onClick={() => removeItem(id)}>Remove</Button>
-                         </Box>
-                        </>
-                    );
-                })} */}
-        <DeveloperEntry developerList={developerList} removeItem={removeItem} />
+        <div className='dev-list'>
+          {developerList.map((developerInfo, index) => {
+            //   console.log(index)
+            return (
+              <DeveloperEntry
+                key={index}
+                index={index}
+                developerInfo={developerInfo}
+                removeItem={removeItem}
+              />
+            )
+          })}
+        </div>
       </div>
       <form onSubmit={handleSubmit}>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            p: 2,
-            m: 4,
-            justifyContent: 'space-evenly',
+            p: '0 2',
+            m: '0 4',
+            justifyContent: 'space-between',
             bgcolor: 'background.white',
             borderRadius: 1,
           }}
         >
-          {/* <Item>
-            <Input
-              placeholder='id'
-              type='text'
-              name='id'
-              value={developerList.length}
-              onChange={(e) => setId(developerList.length)}
-            />
-          </Item> */}
           <Item>
             <Input
               placeholder='Developer Name'
@@ -155,7 +140,7 @@ export default function DeveloperInput() {
           <Item>
             <Input
               placeholder='Sprint Capacity'
-              type='text'
+              type='number'
               name='sprintCapacity'
               value={sprintCapacity}
               onChange={(e) => setSprintCapacity(e.target.value)}
@@ -164,7 +149,7 @@ export default function DeveloperInput() {
           <Item>
             <Input
               placeholder='capacity'
-              type='text'
+              type='number'
               name='capacity'
               value={capacity}
               onChange={(e) => setCapacity(e.target.value)}
@@ -175,6 +160,6 @@ export default function DeveloperInput() {
           Add Story
         </Button>
       </form>
-    </>
+    </div>
   )
 }
