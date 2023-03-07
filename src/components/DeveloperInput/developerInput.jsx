@@ -18,13 +18,6 @@ import React, { useState } from 'react'
 import DeveloperEntry from '../DeveloperEntry/developerEntry'
 import './developerInput.css'
 
-const data = [
-  { developer: 'xyz', sprintCapacity: 8, capacity: 14 },
-  { developer: 'uvw', sprintCapacity: 8, capacity: 42 },
-  { developer: 'pqr', sprintCapacity: 8, capacity: 34 },
-  { developer: 'yut', sprintCapacity: 8, capacity: 54 },
-]
-
 function Item(props) {
   const { sx, ...other } = props
   return (
@@ -55,26 +48,28 @@ Item.propTypes = {
   ]),
 }
 
-export default function DeveloperInput() {
-  const [developerList, setDeveloperList] = useState(data)
-  //   const [id, setId] = useState(0)
+export default function DeveloperInput({ developerList, setDeveloperList, deleteCheck }) {
+  // const [developerList, setDeveloperList] = useState(data)
+  const [id, setId] = useState(developerList[developerList.length - 1].id + 1)
   const [developer, setDeveloper] = useState('')
-  const [sprintCapacity, setSprintCapacity] = useState(0)
-  const [capacity, setCapacity] = useState(0)
+  const [sprintCapacity, setSprintCapacity] = useState(null)
+  const [capacity, setCapacity] = useState(null)
 
   const removeItem = (id) => {
-    let newDeveloperList = developerList.filter((developer, index) => index !== id)
+    let newDeveloperList = developerList.filter((developer) => developer.id !== id)
     setDeveloperList(newDeveloperList)
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (developer && capacity && sprintCapacity) {
-      const newId = developerList.length
-      const newDeveloper = { id: newId, developer, sprintCapacity, capacity }
+    if (id && developer && capacity && sprintCapacity) {
+      // const newId = { id }
+      // console.log(id, developer, sprintCapacity, capacity)
+      const newDeveloper = { id, developer, sprintCapacity, capacity }
       setDeveloperList((developerList) => {
         return [...developerList, newDeveloper]
       })
       //   setId(developerList.length)
+      setId(id + 1)
       setDeveloper('')
       //   console.log(developerList)
     }
@@ -102,17 +97,21 @@ export default function DeveloperInput() {
           <Item width={150}>Capacity</Item>
         </Box>
         <div className='dev-list'>
-          {developerList.map((developerInfo, index) => {
-            //   console.log(index)
-            return (
-              <DeveloperEntry
-                key={index}
-                index={index}
-                developerInfo={developerInfo}
-                removeItem={removeItem}
-              />
-            )
-          })}
+          {developerList.length === 0 ? (
+            <h1>No Developers</h1>
+          ) : (
+            developerList.map((developerInfo) => {
+              //   console.log(index)
+              return (
+                <DeveloperEntry
+                  key={developerInfo.id}
+                  developerInfo={developerInfo}
+                  removeItem={removeItem}
+                  deleteCheck={deleteCheck}
+                />
+              )
+            })
+          )}
         </div>
       </div>
       <form onSubmit={handleSubmit}>
@@ -127,6 +126,16 @@ export default function DeveloperInput() {
             borderRadius: 1,
           }}
         >
+          <Item>
+            <Input
+              placeholder='Id'
+              type='number'
+              name='id'
+              // defaultValue={id}
+              value={id}
+              // onChange={(e) => setDeveloper(e.target.value)}
+            />
+          </Item>
           <Item>
             <Input
               placeholder='Developer Name'
@@ -156,10 +165,17 @@ export default function DeveloperInput() {
             />
           </Item>
         </Box>
+
         <Button variant='contained' style={{ margin: '0 auto', display: 'flex' }} type='submit'>
-          Add Story
+          Add Developer
         </Button>
       </form>
     </div>
   )
+}
+
+DeveloperInput.propTypes = {
+  developerList: PropTypes.array,
+  setDeveloperList: PropTypes.func,
+  deleteCheck: PropTypes.func,
 }

@@ -12,7 +12,11 @@ import {
   //   createTheme,
   //   responsiveFontSizes,
   //   Grid,
+  Fab,
+  Tooltip,
+  IconButton,
 } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import PropTypes from 'prop-types'
 import React from 'react'
 import './developerEntry.css'
@@ -48,8 +52,8 @@ Item.propTypes = {
   ]),
 }
 
-export default function DeveloperEntry({ key, index, developerInfo, removeItem }) {
-  const { developer, sprintCapacity, capacity } = developerInfo
+export default function DeveloperEntry({ key, developerInfo, removeItem, deleteCheck }) {
+  const { id, developer, sprintCapacity, capacity } = developerInfo
   return (
     <div className='list-item' key={key}>
       <Box
@@ -65,11 +69,24 @@ export default function DeveloperEntry({ key, index, developerInfo, removeItem }
           width: '70vw',
         }}
       >
-        <Item width={200}>{index + 1}</Item>
+        <Item width={200}>{id}</Item>
         <Item width={200}>{developer.toString()}</Item>
         <Item width={200}>{sprintCapacity}</Item>
         <Item width={200}>{capacity}</Item>
-        <Button onClick={() => removeItem(index)}>==</Button>
+        {/* <Button onClick={() => removeItem(index)}>==</Button> */}
+        {deleteCheck(id) ? (
+          <Tooltip title='Delete'>
+            <IconButton color='primary' onClick={() => removeItem(id)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title='Remove or Edit Developer Id in the Stories Input form'>
+            <IconButton disableTouchRipple disableFocusRipple>
+              <DeleteIcon style={{ color: 'red' }} />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     </div>
   )
@@ -80,4 +97,5 @@ DeveloperEntry.propTypes = {
   index: PropTypes.number,
   developerInfo: PropTypes.object,
   removeItem: PropTypes.func,
+  deleteCheck: PropTypes.bool,
 }
